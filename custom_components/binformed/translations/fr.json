@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connexion à BInformed",
+        "description": "Saisissez la clé API de votre compte BInformed. Vous pouvez en générer une via `POST /v1/keys/rotate` ; elle commence par `gn_` et n'est affichée qu'une seule fois.",
+        "data": {
+          "api_key": "Clé API",
+          "name": "Nom",
+          "base_url": "URL de base de l'API"
+        },
+        "data_description": {
+          "api_key": "La clé est envoyée dans l'en-tête `X-API-Key` à chaque requête. Aucune notification de test n'est envoyée lors de la vérification.",
+          "name": "Nom de l'entité de notification, utile si plusieurs comptes BInformed sont configurés.",
+          "base_url": "À modifier uniquement si vous hébergez votre propre instance BInformed."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de contacter l'API BInformed.",
+      "invalid_auth": "Cette clé API est invalide ou a été renouvelée.",
+      "account_not_verified": "L'adresse e-mail de ce compte BInformed n'est pas encore vérifiée.",
+      "rate_limited": "La limite de débit de l'API BInformed a été atteinte. Réessayez dans quelques minutes.",
+      "unknown": "Erreur inattendue."
+    },
+    "abort": {
+      "already_configured": "Cette clé API est déjà configurée."
+    }
+  },
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Impossible de contacter l'API BInformed."
+    },
+    "invalid_auth": {
+      "message": "La clé API BInformed est invalide ou a été renouvelée."
+    },
+    "account_not_verified": {
+      "message": "L'adresse e-mail de ce compte BInformed n'est pas encore vérifiée."
+    },
+    "rate_limited": {
+      "message": "La limite de débit de l'API BInformed a été atteinte."
+    },
+    "invalid_payload": {
+      "message": "BInformed a refusé la notification : {error}"
+    },
+    "send_failed": {
+      "message": "Erreur inattendue lors de l'envoi de la notification BInformed."
+    },
+    "unknown": {
+      "message": "Erreur inattendue lors de l'appel à l'API BInformed."
+    }
+  }
+}

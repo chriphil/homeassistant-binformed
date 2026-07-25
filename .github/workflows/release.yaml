@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and attach the HACS zip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync manifest version with the release tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          python - "$version" <<'PY'
+          import json, pathlib, sys
+          path = pathlib.Path("custom_components/binformed/manifest.json")
+          manifest = json.loads(path.read_text())
+          manifest["version"] = sys.argv[1]
+          path.write_text(json.dumps(manifest, indent=2) + "\n")
+          PY
+
+      - name: Build binformed.zip
+        run: |
+          cd custom_components/binformed
+          zip -r binformed.zip . -x '*.pyc' -x '__pycache__/*'
+
+      - name: Attach the zip to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: custom_components/binformed/binformed.zip

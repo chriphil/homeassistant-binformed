@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to BInformed",
+        "description": "Enter the API key of your BInformed account. You can generate one with `POST /v1/keys/rotate`; it starts with `gn_` and is shown only once.",
+        "data": {
+          "api_key": "API key",
+          "name": "Name",
+          "base_url": "API base URL"
+        },
+        "data_description": {
+          "api_key": "The key is sent as the `X-API-Key` header on every request. No test notification is sent while checking it.",
+          "name": "Name of the notify entity, useful when several BInformed accounts are configured.",
+          "base_url": "Only change this if you run your own BInformed instance."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the BInformed API.",
+      "invalid_auth": "This API key is invalid or has been rotated.",
+      "account_not_verified": "The email address of this BInformed account is not verified yet.",
+      "rate_limited": "The BInformed API rate limit has been exceeded. Try again in a few minutes.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This API key is already configured."
+    }
+  },
+  "exceptions": {
+    "cannot_connect": {
+      "message": "Failed to connect to the BInformed API."
+    },
+    "invalid_auth": {
+      "message": "The BInformed API key is invalid or has been rotated."
+    },
+    "account_not_verified": {
+      "message": "The email address of this BInformed account is not verified yet."
+    },
+    "rate_limited": {
+      "message": "The BInformed API rate limit has been exceeded."
+    },
+    "invalid_payload": {
+      "message": "BInformed rejected the notification: {error}"
+    },
+    "send_failed": {
+      "message": "Unexpected error while sending the BInformed notification."
+    },
+    "unknown": {
+      "message": "Unexpected error while calling the BInformed API."
+    }
+  }
+}
