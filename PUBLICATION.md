@@ -27,12 +27,28 @@ Si vous en choisissez un autre, corrigez ces trois endroits avant de pousser.
 Intégration Home Assistant pour les notifications push BInformed : entité notify pilotable par notify.send_message, configuration par l'interface, aucune dépendance externe.
 ```
 
-**Topics** (obligatoire — même panneau « About », roue dentée) :
+**Topics** (obligatoire — même panneau « About », roue dentée). C'est le
+contrôle que la CI HACS refuse le plus souvent : sans topic, le job échoue avec
+`The repository has no valid topics`.
+
+Dans le champ **Topics**, saisissez-les **un par un en validant avec Entrée**
+après chacun — un collage en une seule fois ne crée qu'un topic invalide :
 
 ```
-home-assistant  homeassistant  hacs  hacs-integration  custom-integration
-notify  notifications  push-notifications  binformed
+home-assistant
+homeassistant
+hacs
+hacs-integration
+custom-integration
+notify
+notifications
+push-notifications
+binformed
 ```
+
+Puis **Save changes**. Relancez ensuite le workflow depuis l'onglet
+**Actions → Validate → Re-run all jobs** : la validation HACS interroge l'API
+GitHub en direct, un nouveau push n'est donc pas nécessaire.
 
 ## 2. Pousser le code
 
