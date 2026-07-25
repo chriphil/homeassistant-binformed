@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Connect to BInformed",
-        "description": "Enter the API key of your BInformed account. You can generate one with `POST /v1/keys/rotate`; it starts with `gn_` and is shown only once.",
+        "description": "Enter the API key of your BInformed account. It is shown in your account on binformed.gericos.com once you sign up, and starts with `gn_`.",
         "data": {
           "api_key": "API key",
           "name": "Name",

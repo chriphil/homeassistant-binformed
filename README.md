@@ -1,84 +1,95 @@
-# BInformed pour Home Assistant
+# BInformed for Home Assistant
 
 [![hacs][hacs-badge]][hacs]
 [![Validate][validate-badge]][validate]
 
-Intégration Home Assistant qui envoie vos notifications d'alerte via l'API
-[BInformed](https://binformed.gericos.com/api-docs). Elle joue exactement le
-même rôle que l'intégration Prowl, mais s'appuie sur votre propre service.
+**English** · [Français](README.fr.md)
 
-## Fonctionnalités
+Send your Home Assistant alerts as push notifications through
+[BInformed](https://binformed.gericos.com). Same role as the Prowl
+integration, backed by the BInformed service.
 
-- Configuration entièrement par l'interface (config flow), aucune ligne de YAML
-  n'est nécessaire.
-- Une entité `notify` par compte, pilotable avec l'action
-  `notify.send_message` (message + titre).
-- Un service historique `notify.<nom>` pour les configurations YAML et les
-  automatisations existantes, avec en plus le champ `url`.
-- Messages d'erreur traduits (français / anglais) pour les cas courants :
-  clé révoquée, compte non vérifié, quota dépassé, API injoignable.
+## Features
 
-## Prérequis
+- Set up entirely from the user interface — no YAML required.
+- A `notify` entity you can pick directly in the automation editor.
+- Translated error messages (English / French) for the common cases: revoked
+  key, unverified account, rate limit, unreachable API.
+- Brand icon and logo included, in light and dark variants.
 
-- Home Assistant **2025.3** ou plus récent.
-- Un compte BInformed **vérifié** (l'API renvoie `403` tant que l'adresse
-  e-mail n'est pas confirmée) avec au moins un appareil enregistré.
-- Une clé API. Elle s'obtient uniquement via `POST /v1/keys/rotate` (qui exige
-  un JWT, donc un login préalable), commence par `gn_` et n'est **affichée
-  qu'une seule fois**. Générer une nouvelle clé invalide immédiatement la
-  précédente.
+## Requirements
 
-> **Note sur la validation de la clé.** `POST /v1/notify` est le seul endpoint
-> de l'API BInformed qui accepte l'en-tête `X-API-Key` ; tous les endpoints de
-> gestion (`/v1/me`, `/v1/devices`, `/v1/keys/rotate`…) exigent un JWT Bearer.
-> L'intégration vérifie donc la clé en envoyant à `/v1/notify` un corps
-> volontairement vide : l'API authentifie la requête puis la rejette pour
-> cause de `message` manquant. Un rejet de payload prouve que la clé est
-> acceptée, et **aucune notification n'est envoyée à vos appareils**.
+- Home Assistant **2025.3** or newer.
+- A **verified** BInformed account — create one at
+  **[binformed.gericos.com](https://binformed.gericos.com)**. Confirm the
+  email you receive: the API refuses to send anything until you do.
+- At least one device registered on the account, otherwise notifications are
+  accepted but delivered to nobody.
+- Your **API key**. It is shown in your account on the BInformed website once
+  you sign up, and starts with `gn_`.
 
 ## Installation
 
-### Via HACS (recommandé)
+### Through HACS
 
-1. Dans HACS, ouvrez le menu ⋮ → **Custom repositories**.
-2. Ajoutez `https://github.com/chriphil/homeassistant-binformed` avec la
-   catégorie **Integration**.
-3. Installez « BInformed », puis redémarrez Home Assistant.
+1. In HACS, open the ⋮ menu → **Custom repositories**.
+2. Add `https://github.com/chriphil/homeassistant-binformed` with the
+   **Integration** category.
+3. Install "BInformed", then restart Home Assistant.
 
-[![Ouvrir dans HACS][hacs-repo-badge]][hacs-repo]
+[![Open in HACS][hacs-repo-badge]][hacs-repo]
 
-### Manuellement
+### Manually
 
-Copiez le dossier `custom_components/binformed` dans le répertoire
-`config/custom_components/` de votre installation, puis redémarrez Home
-Assistant.
+Copy the `custom_components/binformed` folder into the `config/custom_components/`
+directory of your installation, then restart Home Assistant.
 
-## Configuration
+## Setup
 
-**Paramètres → Appareils et services → Ajouter une intégration → BInformed**,
-puis collez votre clé API.
+Go to **Settings → Devices & services → Add integration**, search for
+**BInformed**, and paste your API key.
 
-L'URL de base de l'API (`https://api-binformed.gericos.com` par défaut) n'est
-proposée que si les *options avancées* sont activées sur votre profil
-utilisateur ; ne la modifiez que si vous hébergez votre propre instance.
+That's it. The integration creates one notification entity, ready to use.
 
-## Utilisation
+## Usage
 
-### Entité notify (recommandé)
+### From the automation editor
+
+This is all most people need — no configuration file involved.
+
+1. **Settings → Automations & scenes → Create automation**.
+2. Build your trigger as usual (a sensor, a time, a state change…).
+3. Under **Then do**, click **Add action** and search for
+   **Send a notification message**.
+4. Pick the **BInformed** entity as the target.
+5. Fill in **Message**, and optionally **Title**.
+
+The same entity is available anywhere Home Assistant lets you send a
+notification: scripts, scenes, the "Notifications" section of a dashboard, or
+a manual test from **Developer tools → Actions**.
+
+### Advanced usage
+
+<details>
+<summary>Calling the entity from YAML</summary>
 
 ```yaml
 actions:
   - action: notify.send_message
     target:
-      entity_id: notify.mon_compte_binformed
+      entity_id: notify.binformed
     data:
-      title: Alerte chaudière
-      message: La température est descendue sous 5 °C.
+      title: Boiler alert
+      message: Temperature dropped below 5 °C.
 ```
 
-### Service historique
+</details>
 
-Déclaré via `configuration.yaml` :
+<details>
+<summary>Legacy <code>notify.&lt;name&gt;</code> service</summary>
+
+Kept for existing automations, and the only way to attach a clickable URL to a
+notification. Declared in `configuration.yaml`:
 
 ```yaml
 notify:
@@ -87,39 +98,62 @@ notify:
     api_key: !secret binformed_api_key
 ```
 
-Il accepte en plus un champ `url` (HTTPS obligatoire) :
+It accepts an extra `url` field, which must use HTTPS:
 
 ```yaml
 actions:
   - action: notify.binformed
     data:
-      title: Fuite détectée
-      message: Capteur de la buanderie déclenché.
+      title: Leak detected
+      message: Laundry room sensor triggered.
       data:
-        url: https://mon-hass.example.com/lovelace/eau
+        url: https://my-hass.example.com/lovelace/water
 ```
 
-## Limites de l'API
+Store the key in `secrets.yaml`, never in `configuration.yaml`:
 
-| Champ     | Contrainte                    |
-| --------- | ----------------------------- |
-| `message` | obligatoire, 2000 caractères max |
-| `title`   | 200 caractères max            |
-| `url`     | doit être en HTTPS            |
+```yaml
+binformed_api_key: gn_your_key_here
+```
 
-Ces limites sont vérifiées côté intégration avant l'appel réseau, ce qui évite
-de consommer inutilement votre quota.
+</details>
 
-## Dépannage
+<details>
+<summary>Field limits</summary>
 
-| Symptôme | Cause probable |
+| Field | Constraint |
 | --- | --- |
-| `La clé API BInformed est invalide ou a été renouvelée` | La clé a été régénérée via `/v1/keys/rotate`. Supprimez puis rajoutez l'intégration avec la nouvelle clé. |
-| `L'adresse e-mail de ce compte n'est pas encore vérifiée` | Confirmez l'e-mail (`POST /v1/auth/resend-verification`). |
-| `La limite de débit de l'API a été atteinte` | Trop d'appels (HTTP 429). Espacez les notifications. |
-| La notification renvoie `pushed: 0` | Aucun appareil enregistré sur le compte. Vérifiez avec `GET /v1/devices` (JWT requis, pas la clé API). |
+| `message` | required, 2000 characters max |
+| `title` | 200 characters max |
+| `url` | must use HTTPS |
 
-Pour obtenir des journaux détaillés :
+These are checked by the integration before the network call, so a malformed
+notification never consumes your quota.
+
+</details>
+
+<details>
+<summary>How the API key is validated</summary>
+
+`POST /v1/notify` is the only BInformed endpoint that accepts the `X-API-Key`
+header; every management endpoint requires a Bearer JWT. The integration
+therefore validates a key by sending `/v1/notify` a deliberately empty body:
+the API authenticates the request, then rejects it for the missing `message`.
+A payload rejection proves the key was accepted, and **no notification reaches
+your devices**.
+
+</details>
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+| --- | --- |
+| `The BInformed API key is invalid or has been rotated` | The key was regenerated. Remove the integration and add it again with the new key. |
+| `The email address of this account is not verified yet` | Confirm the signup email. |
+| `The BInformed API rate limit has been exceeded` | Too many calls (HTTP 429). Space out notifications. |
+| The notification returns `pushed: 0` | No device registered on the account. |
+
+For detailed logs:
 
 ```yaml
 logger:
@@ -128,29 +162,26 @@ logger:
     custom_components.binformed: debug
 ```
 
-## Logo et icône
+## Brand images
 
-Les images de marque sont embarquées dans `custom_components/binformed/brand/`
-et reprennent l'icône de l'application iOS BInformed :
+Brand assets live in `custom_components/binformed/brand/` and reuse the icon of
+the BInformed iOS app:
 
-| Fichier | Dimensions | Usage |
+| File | Dimensions | Usage |
 | --- | --- | --- |
-| `icon.png` / `icon@2x.png` | 256² / 512² | Liste des intégrations, carte de l'appareil |
-| `logo.png` / `logo@2x.png` | 1028×256 / 2057×512 | Page de l'intégration, thème clair |
-| `dark_logo.png` / `dark_logo@2x.png` | idem | Thème sombre |
+| `icon.png` / `icon@2x.png` | 256² / 512² | Integration list, device card |
+| `logo.png` / `logo@2x.png` | 1028×256 / 2057×512 | Integration page, light theme |
+| `dark_logo.png` / `dark_logo@2x.png` | same | Dark theme |
 
-Home Assistant **2026.3** ou plus récent les charge automatiquement, sans
-configuration. Sur les versions antérieures elles sont ignorées et l'interface
-retombe sur le CDN [brands.home-assistant.io](https://brands.home-assistant.io) ;
-pour les couvrir, soumettez les mêmes fichiers au dépôt
-[home-assistant/brands](https://github.com/home-assistant/brands) dans
-`custom_integrations/binformed/`.
+Home Assistant **2026.3** or newer loads them automatically, with no
+configuration. Older versions ignore them and fall back to the
+[brands.home-assistant.io](https://brands.home-assistant.io) CDN.
 
-Le logotype existe en deux teintes parce que le bleu clair de la marque
-(`#2DABFA`) n'offre qu'un contraste de 2,4:1 sur fond blanc : la version claire
-utilise `#0B4FA8` (7,5:1), la version sombre garde `#2DABFA`.
+The wordmark comes in two shades because the brand's light blue (`#2DABFA`)
+only reaches a 2.4:1 contrast ratio on white: the light variant uses `#0B4FA8`
+(7.5:1), the dark one keeps `#2DABFA`.
 
-## Développement
+## Development
 
 ```bash
 python3.13 -m venv .venv
@@ -159,7 +190,7 @@ python3.13 -m venv .venv
 .venv/bin/pytest --cov=custom_components.binformed --cov-report=term-missing
 ```
 
-## Licence
+## License
 
 [MIT](LICENSE)
 

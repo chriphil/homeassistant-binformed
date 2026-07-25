@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Connexion à BInformed",
-        "description": "Saisissez la clé API de votre compte BInformed. Vous pouvez en générer une via `POST /v1/keys/rotate` ; elle commence par `gn_` et n'est affichée qu'une seule fois.",
+        "description": "Saisissez la clé API de votre compte BInformed. Elle s'affiche dans votre compte sur binformed.gericos.com dès l'inscription et commence par `gn_`.",
         "data": {
           "api_key": "Clé API",
           "name": "Nom",
