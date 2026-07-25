@@ -199,4 +199,4 @@ python3.13 -m venv .venv
 [hacs-repo]: https://my.home-assistant.io/redirect/hacs_repository/?owner=chriphil&repository=homeassistant-binformed&category=integration
 [hacs-repo-badge]: https://my.home-assistant.io/badges/hacs_repository.svg
 [validate]: https://github.com/chriphil/homeassistant-binformed/actions/workflows/validate.yaml
-[validate-badge]: https://github.com/chriphil/homeassistant-binformed/actions/workflows/validate.yaml/badge.svg
+[validate-badge]: https://github.com/chriphil/homeassistant-binformed/actions/workflows/validate.yaml/badge.svg?branch=main&event=push
