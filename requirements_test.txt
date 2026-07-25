@@ -1,3 +1,8 @@
 pytest-homeassistant-custom-component==0.13.291
 pytest-cov
 ruff==0.16.0
+
+# aiodns 3.5 (pulled in by aiohttp) still references pycares.ares_query_a_result,
+# which pycares 5.x removed: importing aiohttp then fails at collection time.
+# Keep pycares on the 4.x line until aiodns supports 5.x.
+pycares<5
