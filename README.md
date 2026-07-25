@@ -41,7 +41,7 @@ même rôle que l'intégration Prowl, mais s'appuie sur votre propre service.
 ### Via HACS (recommandé)
 
 1. Dans HACS, ouvrez le menu ⋮ → **Custom repositories**.
-2. Ajoutez `https://github.com/jclaude95/homeassistant-binformed` avec la
+2. Ajoutez `https://github.com/chriphil/homeassistant-binformed` avec la
    catégorie **Integration**.
 3. Installez « BInformed », puis redémarrez Home Assistant.
 
@@ -165,7 +165,7 @@ python3.13 -m venv .venv
 
 [hacs]: https://github.com/hacs/integration
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg
-[hacs-repo]: https://my.home-assistant.io/redirect/hacs_repository/?owner=jclaude95&repository=homeassistant-binformed&category=integration
+[hacs-repo]: https://my.home-assistant.io/redirect/hacs_repository/?owner=chriphil&repository=homeassistant-binformed&category=integration
 [hacs-repo-badge]: https://my.home-assistant.io/badges/hacs_repository.svg
-[validate]: https://github.com/jclaude95/homeassistant-binformed/actions/workflows/validate.yaml
-[validate-badge]: https://github.com/jclaude95/homeassistant-binformed/actions/workflows/validate.yaml/badge.svg
+[validate]: https://github.com/chriphil/homeassistant-binformed/actions/workflows/validate.yaml
+[validate-badge]: https://github.com/chriphil/homeassistant-binformed/actions/workflows/validate.yaml/badge.svg

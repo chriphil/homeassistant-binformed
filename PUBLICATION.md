@@ -43,7 +43,7 @@ git init
 git add .
 git commit -m "feat: initial BInformed notify integration for Home Assistant"
 git branch -M main
-git remote add origin https://github.com/jclaude95/homeassistant-binformed.git
+git remote add origin https://github.com/chriphil/homeassistant-binformed.git
 git push -u origin main
 ```
 
@@ -87,7 +87,7 @@ Sur [github.com/hacs/default](https://github.com/hacs/default) :
 1. Forkez le dépôt, puis créez une branche **depuis `master`** — n'ouvrez pas
    la PR depuis `master` lui-même, elle serait refusée.
 2. Éditez le fichier `integration` (un tableau JSON de `"propriétaire/dépôt"`).
-3. Insérez `"jclaude95/homeassistant-binformed"` **à sa place alphabétique**,
+3. Insérez `"chriphil/homeassistant-binformed"` **à sa place alphabétique**,
    sans casser la virgule de la ligne précédente.
 4. Ouvrez la PR en remplissant intégralement le gabarit proposé.
 
